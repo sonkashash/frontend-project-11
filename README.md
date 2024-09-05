@@ -23,7 +23,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/rss-reader.git
+   git clone https://github.com/sonkashash/frontend-project-11
    ```
 2. Install dependencies:
    ```bash
