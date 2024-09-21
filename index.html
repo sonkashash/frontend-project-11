@@ -11,17 +11,18 @@
     <main class="row">
         <section class="bg-dark col-12 text-light p-5">
             <div class="row">
-                <div class="container col-8">
-                    <h1 class="display-4 mb-1">RSS агрегатор</h1>
+                <div class="container col-lg-8">
+                    <h1 class="display-3 mb-0">RSS агрегатор</h1>
                     <p class="lead mb-3">Начните читать RSS сегодня! Это легко, это красиво.</p>
-                    <form class="row" style="height: 60px;">
-                        <div class="col-9">
-                            <label for="url-input" class="w-100 h-100">
-                                <input type="url" id="url-input" class="form-control w-100 h-100"
-                                    placeholder="Ссылка RSS">
+                    <form class="row mb-2 position-relative" style="height: 60px;">
+                        <div class="col-9 ">
+                            <label for="url-input" class="position-absolute top-0 text-dark ">Ссылка RSS</label>
+                            <input type="text" name="url" id="url-input" class="form-control w-100 h-100" autofocus>
+                            <div id="url-feedback" class="invalid-feedback"></div>
                         </div>
-                        <button type="submit" class="col-2 btn btn-primary h-100">Добавить</button>
+                        <button type="submit" class="col-auto btn btn-lg btn-primary h-100">Добавить</button>
                     </form>
+                    <p class="text-secondary example mt-4">Пример: https://lorem-rss.hexlet.app/feed</p>
                 </div>
             </div>
         </section>

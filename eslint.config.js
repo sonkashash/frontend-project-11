@@ -20,6 +20,7 @@ export default [
       globals: {
         ...globals.node,
         ...globals.jest,
+        document: false,
       },
       parserOptions: {
         ecmaVersion: 'latest',
