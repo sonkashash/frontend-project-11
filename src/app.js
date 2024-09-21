@@ -42,29 +42,24 @@ const app = () => {
 
   elements.input.addEventListener('input', (event) => {
     event.preventDefault();
-    const newRssForm = { ...watchedState.rssForm };
-    newRssForm.value = event.target.value;
-    watchedState.rssForm = newRssForm;
+    watchedState.rssForm.value = event.target.value;
   });
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
     validate(watchedState.rssForm.value, watchedState.feeds).then((error) => {
-      const newRssForm = { ...watchedState.rssForm };
-
       if (error) {
-        newRssForm.errors = [error];
-        newRssForm.valid = false;
+        watchedState.rssForm.errors = [error];
+        watchedState.rssForm.valid = false;
       } else {
-        newRssForm.errors = [];
-        newRssForm.valid = true;
-        watchedState.feeds = [...watchedState.feeds, watchedState.rssForm.value];
-        newRssForm.value = '';
+        watchedState.rssForm.errors = [];
+        watchedState.rssForm.valid = true;
+        watchedState.feeds.push(watchedState.rssForm.value);
+        watchedState.rssForm.value = '';
         clearForm(elements);
         renderSuccessMessage(elements);
       }
-
-      watchedState.rssForm = newRssForm;
+      // clearForm;
     });
   });
 };
