@@ -10,7 +10,7 @@ const elements = {
 };
 
 const validate = (url, existingUrls) => {
-  const schema = yup.string().url('Ссылка должна быть валидным URL').required();
+  const schema = yup.string().trim().url('Ссылка должна быть валидным URL').required();
   return schema
     .validate(url)
     .then(() => {
