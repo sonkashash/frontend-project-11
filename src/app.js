@@ -1,66 +1,68 @@
-import onChange from 'on-change';
 import * as yup from 'yup';
-import { renderFormFeedback, clearForm, renderSuccessMessage } from './view.js';
+import watch from './view.js';
 
 const elements = {
-  input: document.getElementById('url-input'),
-  feedback: document.getElementById('url-feedback'),
-  // exampleUrl: document.querySelector('.example'),
   form: document.querySelector('form'),
+  input: document.getElementById('floatingInput'),
+  feedback: document.getElementById('url-feedback'),
+  exampleUrl: document.querySelector('.example'),
 };
 
-const validate = (url, existingUrls) => {
-  const schema = yup.string().trim().url('Ссылка должна быть валидным URL').required();
-  return schema
-    .validate(url)
-    .then(() => {
-      if (existingUrls.includes(url)) {
-        throw new Error('Rss уже существует');
-      }
-      return null;
-    })
-    .catch((error) => error.message);
+yup.setLocale({
+  mixed: {
+    required: 'form.feedback.required',
+    notOneOf: 'form.feedback.existsUrl',
+  },
+  string: {
+    url: 'form.feedback.invalidUrl',
+  },
+});
+
+const validate = (inputUrl, existingUrls) => {
+  const schema = yup.string().trim().required().url()
+    .notOneOf(existingUrls);
+  return schema.validate(inputUrl);
 };
 
-const app = () => {
-  const state = {
+const handleError = (error) => error.message;
+  // if (error.isParsingError) {
+  //   return 'form.feedback.invalidRss';
+  // }
+  // if (axios.isAxiosError(error)) {
+  //   return 'form.feedback.networkError';
+  // }
+
+const app = (i18n) => {
+  const initialState = {
     rssForm: {
+      status: '', // fullfilled, pending
       value: '',
-      valid: true,
-      errors: [],
+      isValid: true,
+      error: null,
     },
+    posts: [],
     feeds: [],
   };
 
-  const render = (path, value) => {
-    if (path === 'rssForm.errors') {
-      renderFormFeedback(value, elements);
-    }
-  };
+  const { watchedState } = watch(elements, i18n, initialState);
 
-  const watchedState = onChange(state, render);
+  const { rssForm, feeds } = watchedState;
 
   elements.input.addEventListener('input', (event) => {
     event.preventDefault();
-    watchedState.rssForm.value = event.target.value;
+    rssForm.value = event.target.value;
   });
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
-    validate(watchedState.rssForm.value, watchedState.feeds).then((error) => {
-      if (error) {
-        watchedState.rssForm.errors = [error];
-        watchedState.rssForm.valid = false;
-      } else {
-        watchedState.rssForm.errors = [];
-        watchedState.rssForm.valid = true;
-        watchedState.feeds.push(watchedState.rssForm.value);
-        watchedState.rssForm.value = '';
-        clearForm(elements);
-        renderSuccessMessage(elements);
-      }
-      // clearForm;
-    });
+    validate(rssForm.value, feeds)
+      .then(() => {
+        rssForm.error = null;
+        feeds.push(rssForm.value);
+      })
+      .catch((error) => {
+        rssForm.error = handleError(error);
+      });
   });
 };
 
