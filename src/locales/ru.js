@@ -13,6 +13,7 @@ export default {
         success: 'RSS успешно загружен',
         loading: 'Идет загрузка',
         networkError: 'Ошибка сети',
+        unknownError: 'Неизвестная ошибка',
       },
     },
     feeds: {

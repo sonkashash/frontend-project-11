@@ -21,6 +21,7 @@ export default [
         ...globals.node,
         ...globals.jest,
         document: false,
+        DOMParser: 'readonly',
       },
       parserOptions: {
         ecmaVersion: 'latest',

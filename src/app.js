@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import watch from './view.js';
+import fetchData from './parse.js';
 
 const elements = {
   form: document.querySelector('form'),
@@ -24,18 +25,18 @@ const validate = (inputUrl, existingUrls) => {
   return schema.validate(inputUrl);
 };
 
-const handleError = (error) => error.message;
-  // if (error.isParsingError) {
-  //   return 'form.feedback.invalidRss';
-  // }
-  // if (axios.isAxiosError(error)) {
-  //   return 'form.feedback.networkError';
-  // }
+const handleError = (error) => {
+  const errorMapping = {
+    parsingError: 'form.feedback.invalidRss',
+    networkError: 'form.feedback.networkError',
+  };
+  return errorMapping[error.message] || error.message || 'form.feedback.unknownError';
+};
 
 const app = (i18n) => {
   const initialState = {
     rssForm: {
-      status: '', // fullfilled, pending
+      status: '', // fulfilled, pending
       value: '',
       isValid: true,
       error: null,
@@ -45,7 +46,6 @@ const app = (i18n) => {
   };
 
   const { watchedState } = watch(elements, i18n, initialState);
-
   const { rssForm, feeds } = watchedState;
 
   elements.input.addEventListener('input', (event) => {
@@ -55,13 +55,24 @@ const app = (i18n) => {
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
-    validate(rssForm.value, feeds)
+    validate(rssForm.value, feeds.map((feed) => feed.url))
       .then(() => {
+        rssForm.status = 'pending';
+        return fetchData(rssForm.value);
+      })
+      .then((data) => {
+        watchedState.feeds.push({
+          url: rssForm.value,
+          title: data.title,
+          description: data.description,
+        });
+        watchedState.posts.push(...data.items);
+        rssForm.status = 'fulfilled';
         rssForm.error = null;
-        feeds.push(rssForm.value);
       })
       .catch((error) => {
         rssForm.error = handleError(error);
+        rssForm.status = 'error';
       });
   });
 };

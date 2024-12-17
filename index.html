@@ -2,32 +2,32 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSS app</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSS app</title>
 </head>
 
 <body>
-    <main class="row">
-        <section class="bg-dark col-12 text-light p-5">
-            <div class="row">
-                <div class="container col-lg-8">
-                    <h1 class="display-3 mb-0">RSS агрегатор</h1>
-                    <p class="lead mb-3">Начните читать RSS сегодня! Это легко, это красиво.</p>
-                    <form class="input-group mb-3 needs-validation">
-                        <div class="form-floating has-validation">
-                            <input type="text" id="floatingInput" class="form-control" style="height: 60px"
-                                placeholder="Ссылка RSS">
-                            <label for="floatingInput" class="text-dark">Ссылка RSS</label>
-                            <p class="text-secondary example mb-0">Пример: https://lorem-rss.hexlet.app/feed</p>
-                            <div id="url-feedback" class="invalid-feedback"></div>
-                        </div>
-                        <button class="btn btn-primary" style="height: 60px" type="submit">Добавить</button>
-                    </form>
-                </div>
+  <main class="row">
+    <section class="bg-dark col-12 text-light p-5">
+      <div class="row">
+        <div class="container col-lg-8">
+          <h1 id="form-title" class="display-3 mb-0">RSS агрегатор</h1>
+          <p id="form-subtitle" class="lead mb-3">Начните читать RSS сегодня! Это легко, это красиво.</p>
+          <form class="input-group mb-3 needs-validation">
+            <div class="form-floating has-validation">
+              <input type="text" id="floatingInput" class="form-control" style="height: 60px" placeholder="Ссылка RSS">
+              <label for="floatingInput" id="form-label" class="text-dark">Ссылка RSS</label>
+              <p class="text-secondary example mb-0">Пример: https://lorem-rss.hexlet.app/feed</p>
+              <div id="url-feedback" class="invalid-feedback"></div>
             </div>
-        </section>
-    </main>
+            <button id="form-button" class="btn btn-primary" style="height: 60px" type="submit">Добавить</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="container row">
+    </section>
+  </main>
 </body>
-
 </html>
