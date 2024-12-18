@@ -33,6 +33,24 @@ const handleError = (error) => {
   return errorMapping[error.message] || error.message || 'form.feedback.unknownError';
 };
 
+const checkForUpdates = (watchedState) => {
+  const { feeds } = watchedState;
+  feeds.forEach((feed) => {
+    fetchData(feed.url)
+      .then((data) => {
+        const newPosts = data.items.filter((item) => !watchedState.posts.some((post) => post.link === item.link));
+        if (newPosts.length > 0) {
+          watchedState.posts.unshift(...newPosts);
+        }
+      })
+      .catch((error) => {
+        console.error('Error checking for updates:', handleError(error));
+      });
+  });
+
+  setTimeout(() => checkForUpdates(watchedState), 5000); 
+};
+
 const app = (i18n) => {
   const initialState = {
     rssForm: {
@@ -75,6 +93,9 @@ const app = (i18n) => {
         rssForm.status = 'error';
       });
   });
+
+  checkForUpdates(watchedState)
+
 };
 
 export default app;
